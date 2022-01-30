@@ -3,11 +3,22 @@ import { Formik, Field, Form } from 'formik';
 import { Button, Stack, Text } from '@chakra-ui/react';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, selectIsLoading } from '../store/slices/registerSlice';
-const RegisterForm = () => {
-  const isLoading = useSelector(selectIsLoading);
+import { Navigate } from 'react-router-dom';
+import {
+  register,
+  selectIsLoading,
+  selectIsLogged,
+} from '../store/slices/registerSlice';
 
+const RegisterForm = () => {
   const dispatch = useDispatch();
+  const isLoading = useSelector(selectIsLoading);
+  const isLogged = useSelector(selectIsLogged);
+
+  if (isLogged) {
+    return <Navigate to={'/'} />;
+  }
+
   const submitHandler = values => {
     dispatch(register(values));
   };
