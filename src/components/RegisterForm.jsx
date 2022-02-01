@@ -3,25 +3,21 @@ import { Formik, Field, Form } from 'formik';
 import { Button, Stack, Text } from '@chakra-ui/react';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { register, selectIsLoading } from '../store/slices/registerSlice';
 import { Navigate } from 'react-router-dom';
-import {
-  register,
-  selectIsLoading,
-  selectIsLogged,
-} from '../store/slices/registerSlice';
-
+import { selectIsLogged } from '../store/slices/registerSlice';
 const RegisterForm = () => {
-  const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
   const isLogged = useSelector(selectIsLogged);
+  const isLoading = useSelector(selectIsLoading);
+
+  const dispatch = useDispatch();
+  const submitHandler = values => {
+    dispatch(register(values));
+  };
 
   if (isLogged) {
     return <Navigate to={'/'} />;
   }
-
-  const submitHandler = values => {
-    dispatch(register(values));
-  };
 
   const validationScheme = Yup.object({
     name: Yup.string()
@@ -83,32 +79,40 @@ const RegisterForm = () => {
             </label>
             <Field id="inputLastName" name="lastName" className="input" />
             {errors.lastName && touched.lastName ? (
-              <Text variant="error">{errors.lastName}</Text>
+              <Text variant="error" id="inputError">
+                {errors.lastName}
+              </Text>
             ) : null}
             <label htmlFor="inputEmail">
               <Text>Email</Text>
             </label>
             <Field id="inputEmail" name="email" className="input" />
             {errors.email && touched.email ? (
-              <Text variant="error">{errors.email}</Text>
+              <Text variant="error" id="inputError">
+                {errors.email}
+              </Text>
             ) : null}
             <label htmlFor="inputAge">
               <Text>Edad</Text>
             </label>
             <Field id="inputAge" name="age" type="number" className="input" />
             {errors.age && touched.age ? (
-              <Text variant="error">{errors.age}</Text>
+              <Text variant="error" id="inputError">
+                {errors.age}
+              </Text>
             ) : null}
             <label htmlFor="inputRole">
               <Text>Rol</Text>
             </label>
-            <Field as="select" name="role" className="input">
+            <Field as="select" id="inputRole" name="role" className="input">
               <option defaultValue>Selecciona un rol</option>
               <option value={1}>Administrador</option>
               <option value={2}>Stantard</option>
             </Field>
             {errors.role && touched.role ? (
-              <Text variant="error">{errors.role}</Text>
+              <Text variant="error" id="inputError">
+                {errors.role}
+              </Text>
             ) : null}
             <label htmlFor="inputPassword">
               <Text>Contraseña</Text>
@@ -120,7 +124,9 @@ const RegisterForm = () => {
               className="input"
             />
             {errors.password && touched.password ? (
-              <Text variant="error">{errors.password}</Text>
+              <Text variant="error" id="inputError">
+                {errors.password}
+              </Text>
             ) : null}
             <label htmlFor="inputPasswordConfirm">
               <Text>Confirmar contraseña</Text>
@@ -132,7 +138,9 @@ const RegisterForm = () => {
               className="input"
             />
             {errors.passwordConfirm && touched.passwordConfirm ? (
-              <Text variant="error">{errors.passwordConfirm}</Text>
+              <Text variant="error" id="inputError">
+                {errors.passwordConfirm}
+              </Text>
             ) : null}
             <Button
               id="submitButton"
